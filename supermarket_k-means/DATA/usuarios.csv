@@ -1,0 +1,6 @@
+id,nombres,apellidos,correo,contraseña,categoria_ultima_compra
+1,Julian,Burga,julian@gmail.com,12345678,Frutas
+2,María,González,maria@email.com,pass456,Bebidas
+3,Carlos,Rodríguez,carlos@email.com,pass789,Vegetales
+4,David,Mesta,davidmesta09@gmail.com,123123,Bebidas
+5,Diego,Castro,CastroPastor17@gmail.com,159147,Frutas
