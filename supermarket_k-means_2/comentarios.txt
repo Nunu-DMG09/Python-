@@ -1,0 +1,90 @@
+FORMA 1 POR Segmentación:
+
+    def segmentar_productos_con_kmeans(productos):
+
+    ventas_agrupadas = ventas.groupby('id_producto')['cantidad'].sum().reset_index()
+    ventas_agrupadas.rename(columns={'cantidad': 'total_ventas'}, inplace=True)
+
+    # Unir la información de ventas con los productos
+    productos = productos.merge(ventas_agrupadas, on='id_producto', how='left')
+
+    # Si un producto no tiene ventas, asignamos 0
+    productos['total_ventas'].fillna(0, inplace=True)
+
+    # Aplicar transformación logarítmica para evitar valores extremos
+    productos['total_ventas'] = np.log1p(productos['total_ventas'])  # log(1 + x) para evitar log(0)
+
+    # Normalizar los datos
+    scaler = MinMaxScaler()
+    productos[['precio']] = scaler.fit_transform(productos[['precio']])
+
+
+    # Aplicar K-Means
+    kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+    productos['cluster'] = kmeans.fit_predict(productos[['precio', 'total_ventas']])
+
+    # Nombres de los clusters
+    cluster_names = {
+        0: "Bajo precio, bajas ventas",
+        1: "Precio medio, ventas moderadas",
+        2: "Productos caros y populares"
+    }
+
+    productos['cluster_name'] = productos['cluster'].map(cluster_names)
+
+    # Graficar resultados
+    colores = ['green', 'blue', 'red']
+    for cluster in range(kmeans.n_clusters):
+        cluster_data = productos[productos['cluster'] == cluster]
+        plt.scatter(cluster_data['precio'], cluster_data['total_ventas'], 
+                    color=colores[cluster], label=f'{cluster_names[cluster]}')
+
+    # Configuración del gráfico
+    plt.xlabel('Precio (Normalizado)')
+    plt.ylabel('Cantidad Vendida (Normalizado)')
+    plt.title('Segmentación de Productos con K-Means')
+    plt.legend()
+    plt.show()
+
+
+
+
+FORMA 2 REALES CANTIDAD Y PRECIO:
+
+def segmentar_productos_con_kmeans(productos):
+
+    # Asegurar que 'total_ventas' se calcule correctamente
+    ventas_agrupadas = ventas.groupby('id_producto')['cantidad'].sum().reset_index()
+    ventas_agrupadas.rename(columns={'cantidad': 'total_ventas'}, inplace=True)
+
+    # Unir la información de ventas con los productos
+    productos = productos.merge(ventas_agrupadas, on='id_producto', how='left')
+
+    # Si un producto no tiene ventas, asignamos 0
+    productos['total_ventas'].fillna(0, inplace=True)
+
+    # Aplicar K-Means sin normalizar los valores
+    kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+    productos['cluster'] = kmeans.fit_predict(productos[['precio', 'total_ventas']])
+
+    # Asignar nombres a los clusters
+    cluster_names = {
+        0: "Bajo precio, bajas ventas",
+        1: "Precio medio, ventas moderadas",
+        2: "Productos caros y populares"
+    }
+    productos['cluster_name'] = productos['cluster'].map(cluster_names)
+
+    # Graficar resultados con precios reales en el eje X
+    colores = ['red', 'blue', 'green']
+    plt.figure(figsize=(8, 6))
+    for cluster in range(kmeans.n_clusters):
+        plt.scatter(productos[productos['cluster'] == cluster]['precio'],
+                    productos[productos['cluster'] == cluster]['total_ventas'],
+                    color=colores[cluster], label=cluster_names[cluster])
+
+    plt.xlabel('Precio (Real)')
+    plt.ylabel('Cantidad Vendida (Real)')
+    plt.title('Segmentación de Productos con K-Means')
+    plt.legend()
+    plt.show()

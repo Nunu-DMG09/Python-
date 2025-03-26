@@ -1,0 +1,101 @@
+id_producto,nombre,precio,categoria,puntuacion
+1,Arroz,3.50,Alimentos,4.5
+2,Fideos,2.00,Alimentos,4.2
+3,Leche,4.20,Lácteos,4.7
+4,Pan,1.50,Panadería,4.3
+5,Azúcar,3.00,Alimentos,4.1
+6,Aceite,7.50,Alimentos,4.6
+7,Café,5.00,Bebidas,4.8
+8,Galletas,2.50,Snacks,4.0
+9,Jugo,3.80,Bebidas,4.2
+10,Yogurt,4.50,Lácteos,4.5
+11,Mantequilla,6.20,Lácteos,4.4
+12,Queso,8.00,Lácteos,4.7
+13,Carne de Res,25.50,Carnes,4.9
+14,Pollo,15.00,Carnes,4.6
+15,Atún,10.75,Enlatados,4.3
+16,Salchichas,9.20,Carnes,4.1
+17,Huevos,12.30,Alimentos,4.7
+18,Harina,2.80,Alimentos,4.0
+19,Pasta de Tomate,5.60,Alimentos,4.3
+20,Helado,14.00,Postres,4.8
+21,Chocolate,7.80,Postres,4.9
+22,Cereal,11.50,Desayuno,4.5
+23,Mermelada,6.75,Desayuno,4.2
+24,Miel,18.00,Desayuno,4.6
+25,Detergente,20.40,Limpieza,4.0
+26,Shampoo,15.90,Higiene,4.3
+27,Jabón,7.25,Higiene,4.2
+28,Desodorante,9.50,Higiene,4.4
+29,Crema Dental,5.80,Higiene,4.3
+30,Toallas de Papel,8.90,Limpieza,4.1
+31,Servilletas,3.10,Limpieza,4.0
+32,Refresco,6.25,Bebidas,4.4
+33,Agua Mineral,4.50,Bebidas,4.5
+34,Vino,30.00,Bebidas,4.9
+35,Cerveza,12.00,Bebidas,4.6
+36,Whisky,50.00,Bebidas,4.8
+37,Suspiro,4.75,Panadería,4.3
+38,Manteca,6.60,Alimentos,4.1
+39,Aceitunas,10.90,Alimentos,4.2
+40,Gaseosa,7.30,Bebidas,4.5
+41,Mayonesa,5.20,Aderezos,4.0
+42,Ketchup,4.40,Aderezos,4.2
+43,Salsa de Soya,8.10,Aderezos,4.3
+44,Mostaza,3.95,Aderezos,4.1
+45,Te,6.90,Bebidas,4.6
+46,Hierbas Aromáticas,12.50,Alimentos,4.7
+47,Frutas Secas,22.80,Snacks,4.8
+48,Levadura,4.20,Panadería,4.1
+49,Oyuco,5.90,Alimentos,4.3
+50,Lentejas,3.75,Alimentos,4.2
+51,Quinua,14.30,Alimentos,4.7
+52,Chía,9.80,Alimentos,4.5
+53,Trigo,3.20,Alimentos,4.3
+54,Choclo,4.10,Alimentos,4.2
+55,Pepinillos,7.75,Enlatados,4.0
+56,Manzana,3.50,Frutas,4.8
+57,Plátano,2.80,Frutas,4.6
+58,Pera,4.30,Frutas,4.5
+59,Uvas,6.90,Frutas,4.7
+60,Naranja,3.60,Frutas,4.4
+61,Zanahoria,2.50,Verduras,4.3
+62,Papa,1.90,Verduras,4.2
+63,Cebolla,2.30,Verduras,4.1
+64,Tomate,3.75,Verduras,4.5
+65,Espinaca,4.20,Verduras,4.6
+66,Brocoli,5.80,Verduras,4.7
+67,Almendras,22.50,Snacks,4.9
+68,Nueces,18.75,Snacks,4.8
+69,Castañas,20.30,Snacks,4.7
+70,Ciruelas Secas,15.90,Snacks,4.6
+71,Dátiles,16.80,Snacks,4.5
+72,Coco Rallado,10.25,Postres,4.4
+73,Flan,8.40,Postres,4.3
+74,Turrón,9.70,Postres,4.2
+75,Churros,7.30,Postres,4.5
+76,Gelatina,4.50,Postres,4.1
+77,Sal,1.20,Alimentos,4.0
+78,Pimienta,3.80,Alimentos,4.3
+79,Orégano,5.10,Alimentos,4.4
+80,Comino,4.00,Alimentos,4.2
+81,Canela,6.30,Alimentos,4.5
+82,Leche Condensada,7.90,Lácteos,4.6
+83,Leche Evaporada,6.40,Lácteos,4.4
+84,Queso Fresco,9.20,Lácteos,4.7
+85,Queso Mozzarella,12.30,Lácteos,4.8
+86,Yogurt Natural,5.40,Lácteos,4.5
+87,Enlatado de Durazno,8.90,Enlatados,4.3
+88,Enlatado de Piña,9.50,Enlatados,4.4
+89,Enlatado de Atún,10.30,Enlatados,4.5
+90,Enlatado de Sardina,7.60,Enlatados,4.2
+91,Chorizo,14.80,Carnes,4.6
+92,Tocino,16.90,Carnes,4.8
+93,Costillas de Cerdo,22.50,Carnes,4.9
+94,Pescado,19.80,Carnes,4.7
+95,Pechuga de Pollo,13.90,Carnes,4.5
+96,Camarones,30.50,Mariscos,4.9
+97,Calamares,25.80,Mariscos,4.8
+98,Langostinos,32.10,Mariscos,5.0
+99,Mejillones,20.90,Mariscos,4.7
+100,Almejas,18.60,Mariscos,4.6
