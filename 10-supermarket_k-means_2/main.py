@@ -1,9 +1,11 @@
+
+# Programador: David Mesta
+
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans
 import numpy as np
-from sklearn.preprocessing import StandardScaler
 
 def load_data(productos_file, ventas_file):
     
