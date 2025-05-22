@@ -43,6 +43,7 @@
                     <td>{{ c.direccion }}</td>
                     <td>{{ c.telefono }}</td>
                     <td>
+                       <a href="{{ url_for('editar_cliente', id_cliente=c['id_cliente']) }}" class="btn btn-sm btn-warning">Editar</a>
                        <a href="{{ url_for('eliminar_cliente_route', id_cliente=c['id_cliente']) }}" class="btn btn-sm btn-danger">Eliminar</a>
                     </td>
                 </tr>

@@ -7,16 +7,17 @@
 </head>
 <body>
     <div class="container py-4">
-        <h2>Detalle de Venta ID: {{ venta[0] }}</h2>
-        <p><strong>Cliente:</strong> {{ venta[5] }}</p>
-        <p><strong>Fecha:</strong> {{ venta[2] }}</p>
+        <h2>Detalle de Venta ID: {{ venta['id_venta'] }}</h2>
+        <p><strong>Cliente:</strong> {{ venta['nombre_cliente'] }}</p>
+        <p><strong>Fecha:</strong> {{ venta['fecha'] }}</p>
 
-        <form action="{{ url_for('detalle_venta_agregar', id=venta[0]) }}" method="post" class="row g-3 mb-4">
+
+        <form action="{{ url_for('detalle_venta', id=venta['id_venta']) }}" method="post" class="row g-3 mb-4">
             <div class="col-md-4">
                 <label>Producto</label>
                 <select name="id_producto" class="form-select" required>
                     {% for p in productos %}
-                    <option value="{{ p[0] }}">{{ p[1] }} - Stock: {{ p[3] }}</option>
+                    <option value="{{ p['id_producto'] }}">{{ p['nombre_producto'] }} - Stock: {{ p['stock'] }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -41,10 +42,10 @@
             <tbody>
                 {% for d in detalles %}
                 <tr>
-                    <td>{{ d[5] }}</td>
-                    <td>{{ d[2] }}</td>
-                    <td>S/. {{ d[3] }}</td>
-                    <td>S/. {{ d[2] * d[3] }}</td>
+                    <td>{{ d['nombre_producto'] }}</td>
+                    <td>{{ d['cantidad'] }}</td>
+                    <td>S/ {{ d['precio_unitario'] }}</td>
+                    <td>S/ {{ d['cantidad'] * d['precio_unitario'] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

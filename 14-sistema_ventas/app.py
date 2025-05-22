@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from models.usuario import login, registrar_usuario
 from models.cliente import listar_clientes, registrar_cliente, eliminar_cliente, obtener_cliente, actualizar_cliente
 from models.producto import listar_productos, agregar_producto, eliminar_producto, obtener_producto, actualizar_producto
-from models.venta import registrar_venta, listar_ventas, obtener_detalle_venta
+from models.venta import registrar_venta, listar_ventas, obtener_detalle_venta, obtener_venta_por_id, listar_productos_con_stock, obtener_producto_por_id, obtener_venta, obtener_detalles_venta
 from utils.db import get_connection
 
 app = Flask(__name__)
@@ -153,19 +153,33 @@ def ventas():
     if "usuario" not in session:
         flash("Debes iniciar sesión primero 🔒", "warning")
         return redirect(url_for("login_usuario"))
-    
+
+    productos = listar_productos()
+    clientes = listar_clientes()
+    ventas = listar_ventas()
+
     if request.method == "POST":
         id_cliente = request.form["id_cliente"]
-        # 💥 AÑADE ESTA LÍNEA:
-        productos = [(1, 2, 10.0)]  # Producto 1, 2 unidades, S/.10 cada una
-        registrar_venta(id_cliente, productos)  # o la lógica que uses
-        flash("Venta registrada exitosamente", "success")
+        productos_seleccionados = []
+
+        for p in productos:
+            cantidad_str = request.form.get(f"producto_{p['id_producto']}", "")
+            if cantidad_str.isdigit() and int(cantidad_str) > 0:
+                cantidad = int(cantidad_str)
+                subtotal = cantidad * float(p['precio'])  # Asegúrate que p['precio'] sea float
+                productos_seleccionados.append((p['id_producto'], cantidad, subtotal))
+
+        if not productos_seleccionados:
+            flash("Selecciona al menos un producto válido", "warning")
+            return redirect(url_for("ventas"))
+
+        registrar_venta(id_cliente, productos_seleccionados)
+        flash("Venta registrada exitosamente ✅", "success")
         return redirect(url_for("ventas"))
 
-    ventas = listar_ventas()
-    clientes = listar_clientes()  # ⚠️ Esto es CLAVE
+    return render_template("ventas.html", ventas=ventas, clientes=clientes, productos=productos)
 
-    return render_template("ventas.html", ventas=ventas, clientes=clientes)
+
 
 @app.route("/venta/eliminar/<int:id>")
 def eliminar_venta(id):
@@ -188,13 +202,48 @@ def eliminar_venta(id):
             conn.close()
     return redirect(url_for("ventas"))
 
-@app.route("/venta/detalle/<int:id>")
+@app.route('/detalle_venta/<int:id>', methods=['GET', 'POST'])
 def detalle_venta(id):
-    if "usuario" not in session:
-        flash("Debes iniciar sesión primero 🔒", "warning")
-        return redirect(url_for("login_usuario"))
-    detalles = obtener_detalle_venta(id)
-    return render_template("detalle_venta.html", detalles=detalles)
+    if request.method == 'POST':
+        id_producto = request.form.get('id_producto')
+        cantidad = int(request.form.get('cantidad'))
+
+        producto = obtener_producto_por_id(id_producto)
+
+        if not producto:
+            flash("Producto no encontrado", "danger")
+            return redirect(url_for('detalle_venta', id=id))
+
+        if cantidad > producto['stock']:
+            flash("No hay suficiente stock disponible", "danger")
+            return redirect(url_for('detalle_venta', id=id))
+
+        # Insertar detalle en la tabla detalle_venta (ajústalo a tu modelo real)
+        conn = get_connection()
+        if conn:
+            cursor = conn.cursor()
+            sql = "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario) VALUES (%s, %s, %s, %s)"
+            cursor.execute(sql, (id, id_producto, cantidad, producto['precio']))
+            
+            # Actualizar el stock del producto
+            cursor.execute("UPDATE productos SET stock = stock - %s WHERE id_producto = %s", (cantidad, id_producto))
+            
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+        flash("Producto agregado correctamente", "success")
+        return redirect(url_for('detalle_venta', id=id))
+
+    # Modo GET: Mostrar la venta con su detalle
+    venta = obtener_venta(id)
+    productos = listar_productos_con_stock()
+    detalles = obtener_detalles_venta(id)
+    total = sum([d['cantidad'] * d['precio_unitario'] for d in detalles])
+
+    return render_template('detalle_venta.html', venta=venta, productos=productos, detalles=detalles, total=total)
+
+
 
 
 

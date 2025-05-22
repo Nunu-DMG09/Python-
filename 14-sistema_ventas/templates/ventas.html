@@ -17,6 +17,24 @@
                     {% endfor %}
                 </select>
             </div>
+            <div class="col-12">
+                <label class="form-label">Selecciona productos</label>
+                <div class="row">
+                {% for p in productos %}
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card mb-2 shadow-sm border-1" style="font-size: 0.9rem;">
+                            <div class="card-body p-2">
+                                <h6 class="card-title mb-1">{{ p.nombre_producto }}</h6>
+                                <p class="mb-1">Precio: <strong>S/. {{ p.precio }}</strong></p>
+                                <p class="mb-1">Stock: {{ p.stock }}</p>
+                                <input type="number" name="producto_{{ p.id_producto }}" class="form-control form-control-sm" min="0" max="{{ p.stock }}" placeholder="Cantidad">
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
             <div class="col-md-4 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary w-100">Crear Venta</button>
             </div>

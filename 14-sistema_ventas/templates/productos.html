@@ -38,6 +38,7 @@
                     <td>{{ p.precio }}</td>
                     <td>{{ p.stock }}</td>
                     <td>
+                       <a href="{{ url_for('editar_producto', id_producto=p['id_producto']) }}" class="btn btn-sm btn-warning">Editar</a>
                        <a href="{{ url_for('eliminar_producto_route', id_producto=p['id_producto']) }}" class="btn btn-sm btn-danger">Eliminar</a>
                     </td>
                 </tr>
