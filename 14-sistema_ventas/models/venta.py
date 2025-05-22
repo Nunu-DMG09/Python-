@@ -75,6 +75,16 @@ def obtener_venta_por_id(id_venta):
         conn.close()
     return venta
 
+def actualizar_total_venta(id_venta):
+    detalles = obtener_detalles_venta(id_venta)
+    total = sum(d['cantidad'] * d['precio_unitario'] for d in detalles)
+
+    conexion = get_connection()
+    cursor = conexion.cursor()
+    cursor.execute("UPDATE ventas SET total = %s WHERE id_venta = %s", (total, id_venta))
+    conexion.commit()
+    conexion.close()
+
 def agregar_detalle_venta(id_venta, id_producto, cantidad, precio_unitario):
     conn = get_connection()
     if conn:
@@ -90,6 +100,7 @@ def agregar_detalle_venta(id_venta, id_producto, cantidad, precio_unitario):
             cursor.execute("""
                 UPDATE productos SET stock = stock - %s WHERE id_producto = %s
             """, (cantidad, id_producto))
+            actualizar_total_venta(id_venta)
 
             conn.commit()
         except Exception as e:

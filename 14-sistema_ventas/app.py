@@ -4,6 +4,10 @@ from models.cliente import listar_clientes, registrar_cliente, eliminar_cliente,
 from models.producto import listar_productos, agregar_producto, eliminar_producto, obtener_producto, actualizar_producto
 from models.venta import registrar_venta, listar_ventas, obtener_detalle_venta, obtener_venta_por_id, listar_productos_con_stock, obtener_producto_por_id, obtener_venta, obtener_detalles_venta
 from utils.db import get_connection
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from io import BytesIO
+from flask import make_response
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey123"
@@ -228,6 +232,16 @@ def detalle_venta(id):
             # Actualizar el stock del producto
             cursor.execute("UPDATE productos SET stock = stock - %s WHERE id_producto = %s", (cantidad, id_producto))
             
+            # 🔥 ACTUALIZAR TOTAL DE LA VENTA
+            cursor.execute("""
+                SELECT SUM(cantidad * precio_unitario)
+                FROM detalle_ventas
+                WHERE id_venta = %s
+            """, (id,))
+            nuevo_total = cursor.fetchone()[0] or 0
+
+            cursor.execute("UPDATE ventas SET total = %s WHERE id_venta = %s", (nuevo_total, id))
+
             conn.commit()
             cursor.close()
             conn.close()
@@ -243,6 +257,54 @@ def detalle_venta(id):
 
     return render_template('detalle_venta.html', venta=venta, productos=productos, detalles=detalles, total=total)
 
+
+@app.route('/detalle_venta/<int:id>/pdf')
+def generar_pdf_venta(id):
+    venta = obtener_venta(id)
+    detalles = obtener_detalles_venta(id)
+
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+
+    y = height - 50
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(50, y, f"Detalle de Venta N° {venta['id_venta']}")
+    y -= 30
+
+    c.setFont("Helvetica", 12)
+    c.drawString(50, y, f"Cliente: {venta['nombre_cliente']}")
+    y -= 20
+    c.drawString(50, y, f"Total: S/. {venta['total']:.2f}")
+    y -= 30
+
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Producto")
+    c.drawString(250, y, "Cantidad")
+    c.drawString(350, y, "Precio Unitario")
+    c.drawString(480, y, "Subtotal")
+    y -= 20
+
+    c.setFont("Helvetica", 12)
+    for detalle in detalles:
+        if y < 60:
+            c.showPage()
+            y = height - 50
+        c.drawString(50, y, detalle['nombre_producto'])
+        c.drawString(250, y, str(detalle['cantidad']))
+        c.drawString(350, y, f"S/. {detalle['precio_unitario']:.2f}")
+        subtotal = detalle['cantidad'] * detalle['precio_unitario']
+        c.drawString(480, y, f"S/. {subtotal:.2f}")
+        y -= 20
+
+    c.showPage()
+    c.save()
+    buffer.seek(0)
+
+    response = make_response(buffer.read())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'inline; filename=venta_{id}.pdf'
+    return response
 
 
 

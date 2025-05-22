@@ -54,6 +54,8 @@
         <p class="text-end fs-5"><strong>Total:</strong> S/. {{ total }}</p>
 
         <a href="{{ url_for('ventas') }}" class="btn btn-secondary mt-3">⬅ Volver</a>
+        <a href="{{ url_for('generar_pdf_venta', id=venta['id_venta']) }}" class="btn btn-danger mt-3" target="_blank">🖨️ Imprimir PDF</a>
+
     </div>
 </body>
 </html>
